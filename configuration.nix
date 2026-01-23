@@ -3,6 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    <home-manager/nixos>
   ];
 
   programs.ssh.startAgent = true;
@@ -38,6 +39,9 @@
     LC_TELEPHONE = "es_UY.UTF-8";
     LC_TIME = "es_UY.UTF-8";
   };
+
+  home.username = "mikhailtsai";
+  home.homeDirectory = "/home/mikhailtsai";
 
   users.users.mikhailtsai = {
     isNormalUser = true;
