@@ -74,10 +74,10 @@
     jack.enable = true;
   };
 
-  programs.hyprland.enable = false;
+  programs.hyprland.enable = true;
 
   services.greetd = {
-    enable = false;
+    enable = true;
     settings = {
       default_session = {
         command = "Hyprland";
