@@ -1,39 +1,32 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
   programs.ssh.startAgent = true;
 
-  # only for VMWare
+  # VMware guest additions
   virtualisation.vmware.guest.enable = true;
   services.openssh.enable = true;
   networking.firewall.allowedTCPPorts = [ 22 ];
-  # only for VMWare end
 
   hardware.graphics.enable = true;
 
-  # Bootloader.
+  # Bootloader
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.useOSProber = true;
 
   networking.hostName = "nixos";
-
-  # networking.wireless.enable = true;
-
-  # Enable networking
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
+  # Time zone
   time.timeZone = "America/Montevideo";
 
-  # Select internationalisation properties.
+  # Locales
   i18n.defaultLocale = "en_US.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "es_UY.UTF-8";
     LC_IDENTIFICATION = "es_UY.UTF-8";
@@ -56,33 +49,66 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-    pulseaudio
     kitty
-    git 
+    git
     open-vm-tools
- ];
+    waybar
+    wofi
+    pavucontrol
+    hyprpaper
+    hyprlock
+    hypridle
+  ];
 
+  # PipeWire
   services.pipewire = {
     enable = true;
-
     alsa.enable = true;
     alsa.support32Bit = true;
-
     pulse.enable = true;
     jack.enable = true;
   };
 
+  # Hyprland
   programs.hyprland.enable = true;
 
+  xdg.configFile."hypr/hypridle.conf".text = ''
+    general {
+        lock_cmd = hyprlock
+        before_sleep_cmd = hyprlock
+        after_sleep_cmd = hyprlock
+    }
+
+    listener {
+        timeout = 1200
+        on-timeout = hyprlock
+    }
+
+    listener {
+        timeout = 3600
+        on-timeout = systemctl suspend
+    }
+  '';
+
+  xdg.configFile."hypr/hyprland.conf".text = ''
+    $mod = SUPER
+    bind = $mod, RETURN, exec, kitty
+    monitor = ,preferred,auto,1
+    exec-once = waybar
+    exec-once = nm-applet
+    exec-once = hyprpaper
+  '';
+
+  # greetd (автологин в Hyprland)
   services.greetd = {
     enable = true;
     settings = {
       default_session = {
-        command = "Hyprland";
+        command = "${pkgs.greetd.gtkgreet}/bin/gtkgreet";
         user = "mikhailtsai";
       };
     };
   };
 
-  system.stateVersion = "25.11"; # Did you read the comment?
+  system.stateVersion = "25.11";
 }
