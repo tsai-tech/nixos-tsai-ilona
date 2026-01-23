@@ -12,6 +12,8 @@
 
   systemd.defaultUnit = "multi-user.target";
 
+  programs.ssh.startAgent = true;
+
   # only for VMWare
   virtualisation.vmware.guest.enable = true;
 
