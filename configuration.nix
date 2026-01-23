@@ -99,6 +99,25 @@
     exec-once = hyprpaper
   '';
 
+  xdg.configFile."kitty/kitty.conf".text = ''
+    background_opacity 0.9
+
+    foreground #d0d0d0
+    background #1a1a1a
+
+    font_family      FiraCode Nerd Font
+    font_size        12.0
+
+    cursor_shape     block
+    cursor_blink     yes
+
+    scrollback_lines 5000
+
+    map ctrl+shift+t new_tab
+    map ctrl+shift+w close_tab
+    map ctrl+shift+enter new_window
+  '';
+
   # greetd (автологин в Hyprland)
   services.greetd = {
     enable = true;
