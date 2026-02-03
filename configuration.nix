@@ -3,20 +3,32 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
+  # Включаем поддержку Flakes
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+    auto-optimise-store = true;
+  };
+
+  # Разрешаем unfree пакеты
+  nixpkgs.config.allowUnfree = true;
+
+  # SSH
   programs.ssh.startAgent = true;
-  virtualisation.vmware.guest.enable = true;
   services.openssh.enable = true;
   networking.firewall.allowedTCPPorts = [ 22 ];
 
+  # Графика
   hardware.graphics.enable = true;
 
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
+  # Загрузчик - systemd-boot для UEFI (современный стандарт)
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
+  # Сеть
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
 
+  # Время и локализация
   time.timeZone = "America/Montevideo";
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -32,17 +44,20 @@
     LC_TIME = "es_UY.UTF-8";
   };
 
+  # Пользователь
   users.users.mikhailtsai = {
     isNormalUser = true;
     description = "Mikhail Tsai";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" ];
   };
 
-  nixpkgs.config.allowUnfree = true;
-
+  # Системные пакеты
   environment.systemPackages = with pkgs; [
     git
-    open-vm-tools
+    wget
+    curl
+
+    # Hyprland ecosystem
     waybar
     wofi
     pavucontrol
@@ -50,8 +65,20 @@
     hyprlock
     hypridle
     kitty
+
+    # Утилиты Wayland
+    wl-clipboard
+    grim
+    slurp
+
+    # Network
+    networkmanagerapplet
+
+    # Управление яркостью
+    brightnessctl
   ];
 
+  # Аудио через PipeWire
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -60,17 +87,34 @@
     jack.enable = true;
   };
 
+  # Hyprland
   programs.hyprland.enable = true;
 
+  # Display manager - greetd с Hyprland
   services.greetd = {
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.greetd.gtkgreet}/bin/gtkgreet";
-        user = "mikhailtsai";
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+        user = "greeter";
       };
     };
   };
+
+  # XDG portals для Wayland
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  };
+
+  # Шрифты
+  fonts.packages = with pkgs; [
+    nerd-fonts.fira-code
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-emoji
+  ];
 
   system.stateVersion = "25.11";
 }

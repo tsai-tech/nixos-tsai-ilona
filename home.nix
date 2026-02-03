@@ -1,10 +1,19 @@
 { config, pkgs, ... }:
 
 {
+  imports = [
+    ./home/hyprland.nix
+    ./home/waybar.nix
+  ];
+
   home.username = "mikhailtsai";
   home.homeDirectory = "/home/mikhailtsai";
   home.stateVersion = "25.11";
 
+  # Позволяем Home Manager управлять собой
+  programs.home-manager.enable = true;
+
+  # Терминал Kitty
   programs.kitty = {
     enable = true;
     settings = {
@@ -14,35 +23,17 @@
       font_family = "FiraCode Nerd Font";
       font_size = "12.0";
       cursor_shape = "block";
-      cursor_blink = "yes";
-      scrollback_lines = 5000;
+      cursor_blink_interval = "0.5";
+      scrollback_lines = 10000;
+      enable_audio_bell = false;
+      window_padding_width = 8;
     };
   };
 
-  xdg.configFile."hypr/hyprland.conf".text = ''
-    $mod = SUPER
-    bind = $mod, RETURN, exec, kitty
-    monitor = ,preferred,auto,1
-    exec-once = waybar
-    exec-once = nm-applet
-    exec-once = hyprpaper
-  '';
-
-  xdg.configFile."hypr/hypridle.conf".text = ''
-    general {
-      lock_cmd = hyprlock
-      before_sleep_cmd = hyprlock
-      after_sleep_cmd = hyprlock
-    }
-
-    listener {
-      timeout = 1200
-      on-timeout = hyprlock
-    }
-
-    listener {
-      timeout = 3600
-      on-timeout = systemctl suspend
-    }
-  '';
+  # Git
+  programs.git = {
+    enable = true;
+    userName = "Mikhail Tsai";
+    userEmail = ""; # Добавь свой email
+  };
 }
