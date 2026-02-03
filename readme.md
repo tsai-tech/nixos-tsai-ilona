@@ -66,7 +66,7 @@ cd nixos
 ### 5. Генерация hardware-configuration.nix
 
 ```bash
-sudo nixos-generate-config --show-hardware-config > hardware-configuration.nix
+sudo nixos-generate-config --show-hardware-config | sudo tee hardware-configuration.nix > /dev/null
 ```
 
 ### 6. Установка
