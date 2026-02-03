@@ -101,10 +101,9 @@
     };
   };
 
-  # XDG portals для Wayland
+  # XDG portals (hyprland автоматически добавляет xdg-desktop-portal-hyprland)
   xdg.portal = {
     enable = true;
-    wlr.enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
@@ -113,7 +112,7 @@
     nerd-fonts.fira-code
     noto-fonts
     noto-fonts-cjk-sans
-    noto-fonts-emoji
+    noto-fonts-color-emoji
   ];
 
   system.stateVersion = "25.11";
