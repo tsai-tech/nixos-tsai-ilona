@@ -47,7 +47,14 @@ sudo mkdir -p /mnt/boot
 sudo mount /dev/disk/by-label/BOOT /mnt/boot
 ```
 
-### 3. Клонирование конфигурации
+### 3. Включение Flakes (на Live ISO)
+
+```bash
+mkdir -p ~/.config/nix
+echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
+```
+
+### 4. Клонирование конфигурации
 
 ```bash
 nix-shell -p git
@@ -56,17 +63,10 @@ sudo git clone https://github.com/YOUR_USERNAME/nixos-tsai.git nixos
 cd nixos
 ```
 
-### 4. Генерация hardware-configuration.nix
+### 5. Генерация hardware-configuration.nix
 
 ```bash
 sudo nixos-generate-config --show-hardware-config > hardware-configuration.nix
-```
-
-### 5. Включение Flakes (на Live ISO)
-
-```bash
-mkdir -p ~/.config/nix
-echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
 ```
 
 ### 6. Установка
