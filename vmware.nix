@@ -29,6 +29,11 @@
     device = "/dev/sda";
   };
 
+  services.xserver = {
+    enable = true;
+    videoDrivers = [ "vmware" ];
+  };
+
   # Для Hyprland в VMware нужен software rendering
   # (VMware не поддерживает hardware cursor в wlroots)
   environment.variables = {
@@ -43,6 +48,12 @@
     extraPackages = with pkgs; [
       mesa
     ];
+  };
+
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
   };
 
   # Увеличиваем таймауты для виртуальной среды
