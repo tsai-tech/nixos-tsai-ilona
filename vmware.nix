@@ -30,7 +30,7 @@
   # ===========================================================================
   services.xserver = {
     enable = true;
-    videoDrivers = [ "vmware" ];
+    # Без явного драйвера — автовыбор (modesetting/fbdev)
     windowManager.openbox.enable = true;
     displayManager.startx.enable = true;
   };
