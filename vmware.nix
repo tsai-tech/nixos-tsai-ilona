@@ -34,6 +34,15 @@
   environment.variables = {
     WLR_RENDERER_ALLOW_SOFTWARE = "1";
     WLR_NO_HARDWARE_CURSORS = "1";
+    WLR_RENDERER = "pixman";  # Принудительный software renderer
+  };
+
+  # Mesa для software rendering
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      mesa
+    ];
   };
 
   # Увеличиваем таймауты для виртуальной среды

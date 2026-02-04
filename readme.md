@@ -36,10 +36,10 @@
 # Сохрани hardware-configuration.nix (создан установщиком)
 cp /etc/nixos/hardware-configuration.nix ~/hardware-configuration.nix.bak
 
-# Клонируй репозиторий
+# Удали стандартную конфигурацию и клонируй репозиторий
+sudo rm -rf /etc/nixos
 sudo git clone https://github.com/mikhailtsai/nixos-tsai.git /etc/nixos
 sudo chown -R $USER:users /etc/nixos
-cd /etc/nixos
 
 # Скопируй hardware-configuration.nix в репозиторий
 cp ~/hardware-configuration.nix.bak /etc/nixos/hardware-configuration.nix
@@ -49,6 +49,9 @@ cp ~/hardware-configuration.nix.bak /etc/nixos/hardware-configuration.nix
 
 ```bash
 cd /etc/nixos
+
+# add hardware-configuration.nix to repository
+sudo git add hardware-configuration.nix
 
 # Для реального железа
 sudo nixos-rebuild switch --flake .#nixos
