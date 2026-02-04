@@ -43,7 +43,14 @@
   # ===========================================================================
   # Графика
   # ===========================================================================
-  hardware.graphics.enable = true;
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      mesa
+      mesa.drivers
+      libva
+    ];
+  };
   boot.kernelModules = [ "vmwgfx" ];
 
   # ===========================================================================
@@ -74,11 +81,16 @@
         sudo chmod 700 "$XDG_RUNTIME_DIR"
       fi
 
+      # Wayland/wlroots в VMware
       export WLR_BACKENDS=x11
-      export WLR_RENDERER_ALLOW_SOFTWARE=1
       export WLR_RENDERER=pixman
       export WLR_NO_HARDWARE_CURSORS=1
+
+      # Mesa software
       export LIBGL_ALWAYS_SOFTWARE=1
+      export GALLIUM_DRIVER=llvmpipe
+      export __GLX_VENDOR_LIBRARY_NAME=mesa
+
       exec Hyprland
     '')
   ];
