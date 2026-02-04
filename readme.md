@@ -9,7 +9,7 @@
 ├── configuration.nix           # Основная системная конфигурация
 ├── home.nix                    # Home Manager (импортирует модули)
 ├── vmware.nix                  # VMware-специфичные настройки (только для тестирования)
-├── hardware-configuration.nix  # Генерируется на целевой системе
+├── hardware-configuration.nix  # Генерируется на целевой системе (не в git)
 └── home/
     ├── hyprland.nix            # Hyprland + hypridle + hyprlock + hyprpaper
     └── waybar.nix              # Waybar конфиг + стили
@@ -24,64 +24,40 @@
 
 ## Установка
 
-### 1. Загрузка с NixOS ISO
+### 1. Установка NixOS
 
-Скачай [NixOS Minimal ISO](https://nixos.org/download/) и загрузись с него.
+Скачай [NixOS Graphical ISO](https://nixos.org/download/) и установи через графический установщик.
 
-### 2. Подготовка диска
+### 2. Клонирование конфигурации
+
+После установки и перезагрузки:
 
 ```bash
-# Разметка диска (UEFI)
-sudo parted /dev/sda -- mklabel gpt
-sudo parted /dev/sda -- mkpart ESP fat32 1MB 512MB
-sudo parted /dev/sda -- set 1 esp on
-sudo parted /dev/sda -- mkpart primary 512MB 100%
+# Сохрани hardware-configuration.nix (создан установщиком)
+cp /etc/nixos/hardware-configuration.nix ~/hardware-configuration.nix.bak
 
-# Форматирование
-sudo mkfs.fat -F 32 -n BOOT /dev/sda1
-sudo mkfs.ext4 -L nixos /dev/sda2
+# Клонируй репозиторий
+sudo git clone https://github.com/mikhailtsai/nixos-tsai.git /etc/nixos
+sudo chown -R $USER:users /etc/nixos
+cd /etc/nixos
 
-# Монтирование
-sudo mount /dev/disk/by-label/nixos /mnt
-sudo mkdir -p /mnt/boot
-sudo mount /dev/disk/by-label/BOOT /mnt/boot
+# Скопируй hardware-configuration.nix в репозиторий
+cp ~/hardware-configuration.nix.bak /etc/nixos/hardware-configuration.nix
 ```
 
-### 3. Включение Flakes (на Live ISO)
+### 3. Применение конфигурации
 
 ```bash
-mkdir -p ~/.config/nix
-echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
-```
+cd /etc/nixos
 
-### 4. Клонирование конфигурации
-
-```bash
-nix-shell -p git
-sudo git clone https://github.com/mikhailtsai/nixos-tsai.git /mnt/etc/nixos
-sudo chown -R $(whoami):users /mnt/etc/nixos
-cd /mnt/etc/nixos
-```
-
-
-### 5. Генерация hardware-configuration.nix
-
-```bash
-sudo nixos-generate-config --root /mnt --show-hardware-config | sudo tee hardware-configuration.nix > /dev/null
-sudo git add hardware-configuration.nix
-```
-
-### 6. Установка
-
-```bash
 # Для реального железа
-sudo nixos-install --flake .#nixos
+sudo nixos-rebuild switch --flake .#nixos
 
 # Для VMware
-sudo nixos-install --flake .#nixos-vmware
+sudo nixos-rebuild switch --flake .#nixos-vmware
 ```
 
-### 7. Перезагрузка
+### 4. Перезагрузка
 
 ```bash
 sudo reboot
