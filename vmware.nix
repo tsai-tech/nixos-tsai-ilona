@@ -69,7 +69,6 @@
   environment.systemPackages = with pkgs; [
     openbox
     xterm
-    mesa-utils
     glxinfo
 
     # Nested режим (из X11)
