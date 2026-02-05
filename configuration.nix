@@ -58,7 +58,7 @@
   users.users.leet = {
     isNormalUser = true;
     description = "Mikhail Tsai";
-    extraGroups = [ "networkmanager" "wheel" "video" "audio" "input" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "input" "docker" ];
   };
 
   # ===========================================================================
@@ -319,7 +319,6 @@
   # VIRTUALISATION (для Docker и т.д.)
   # ===========================================================================
   virtualisation.docker.enable = true;
-  users.users.leet.extraGroups = [ "docker" ];
 
   system.stateVersion = "25.11";
 }
