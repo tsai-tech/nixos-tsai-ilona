@@ -190,7 +190,9 @@
     heroic               # Epic Games launcher
     mindustry
     wesnoth
-    micropolis
+    dwarf-fortress
+    xonotic
+    vessel
     ultrastardx          # UltraStar Deluxe
 
     # -------------------------------------------------------------------------
