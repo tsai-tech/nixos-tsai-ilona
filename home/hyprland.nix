@@ -129,6 +129,9 @@
     # Пипетка цветов
     bind = $mod SHIFT, C, exec, hyprpicker -a
 
+    # Шпаргалка хоткеев
+    bind = $mod, slash, exec, kitty --class cheatsheet -e keybinds
+
     # Состояние окна
     bind = $mod, V, togglefloating,
     bind = $mod, F, fullscreen, 0
@@ -301,6 +304,8 @@
     windowrulev2 = float, class:^(org.gnome.Calculator)$
     windowrulev2 = float, title:^(Picture-in-Picture)$
     windowrulev2 = float, class:^(xdg-desktop-portal-gtk)$
+    windowrulev2 = float, class:^(cheatsheet)$
+    windowrulev2 = size 520 820, class:^(cheatsheet)$
 
     # Размеры для плавающих
     windowrulev2 = size 800 600, class:^(pavucontrol)$

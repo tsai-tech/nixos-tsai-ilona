@@ -114,6 +114,76 @@
     # Node.js — управление версиями (fnm install --lts)
     fnm
 
+    # Шпаргалка по хоткеям (Super+/)
+    (writeShellScriptBin "keybinds" ''
+      C='\033[36m'    # cyan
+      Y='\033[33m'    # yellow
+      B='\033[1m'     # bold
+      R='\033[0m'     # reset
+      H="''${B}''${C}" # header
+
+      echo ""
+      echo "''${H}  ─── ПРИЛОЖЕНИЯ ───''${R}"
+      echo "  ''${Y}Super+Enter''${R}        Терминал"
+      echo "  ''${Y}Super+D''${R}            Лаунчер"
+      echo "  ''${Y}Super+R''${R}            Запуск команды"
+      echo "  ''${Y}Super+E''${R}            Файлы"
+      echo "  ''${Y}Super+B''${R}            Firefox"
+      echo "  ''${Y}Super+L''${R}            Блокировка"
+      echo "  ''${Y}Super+M''${R}            Меню выхода"
+      echo "  ''${Y}Super+Shift+M''${R}      Выход из Hyprland"
+      echo ""
+      echo "''${H}  ─── ОКНА ───''${R}"
+      echo "  ''${Y}Super+Q''${R}            Закрыть окно"
+      echo "  ''${Y}Super+V''${R}            Плавающее"
+      echo "  ''${Y}Super+F''${R}            Полный экран"
+      echo "  ''${Y}Super+Shift+F''${R}      Максимизация"
+      echo "  ''${Y}Super+T''${R}            Поверх всех"
+      echo "  ''${Y}Super+C''${R}            Центрировать"
+      echo "  ''${Y}Super+P''${R}            Pseudo-tile"
+      echo "  ''${Y}Super+J''${R}            Переключить split"
+      echo "  ''${Y}Super+G''${R}            Группа окон"
+      echo "  ''${Y}Super+Tab''${R}          След. в группе"
+      echo ""
+      echo "''${H}  ─── ФОКУС / ПЕРЕМЕЩЕНИЕ ───''${R}"
+      echo "  ''${Y}Super+←↑↓→''${R}        Фокус"
+      echo "  ''${Y}Super+H/K  Alt+J''${R}   Фокус (vim)"
+      echo "  ''${Y}Alt+Tab''${R}            Циклический фокус"
+      echo "  ''${Y}Super+Shift+←↑↓→''${R}  Переместить окно"
+      echo "  ''${Y}Super+Shift+HJKL''${R}   Переместить (vim)"
+      echo "  ''${Y}Super+Ctrl+←↑↓→''${R}   Размер окна"
+      echo "  ''${Y}Super+Ctrl+HJKL''${R}    Размер (vim)"
+      echo "  ''${Y}Ctrl+Shift+←↑↓→''${R}   Swap с соседом"
+      echo ""
+      echo "''${H}  ─── РАБОЧИЕ СТОЛЫ ───''${R}"
+      echo "  ''${Y}Super+1-0''${R}          Переключить 1-10"
+      echo "  ''${Y}Super+Shift+1-0''${R}    Переместить окно"
+      echo "  ''${Y}Super+Alt+1-5''${R}      Переместить тихо"
+      echo "  ''${Y}Super+[ ]''${R}          Пред./след."
+      echo "  ''${Y}Super+Колесо''${R}       Прокрутка столов"
+      echo "  ''${Y}Super+S''${R}            Scratchpad"
+      echo "  ''${Y}Super+Shift+S''${R}      В scratchpad"
+      echo ""
+      echo "''${H}  ─── СКРИНШОТЫ ───''${R}"
+      echo "  ''${Y}Print''${R}              Область → буфер"
+      echo "  ''${Y}Shift+Print''${R}        Экран → буфер"
+      echo "  ''${Y}Super+Print''${R}        Область → Swappy"
+      echo "  ''${Y}Super+Shift+Print''${R}  Экран → Swappy"
+      echo "  ''${Y}Alt+Print''${R}          Окно → буфер"
+      echo ""
+      echo "''${H}  ─── УТИЛИТЫ ───''${R}"
+      echo "  ''${Y}Super+X''${R}            История буфера"
+      echo "  ''${Y}Super+Shift+C''${R}      Пипетка цвета"
+      echo "  ''${Y}Super+/''${R}            Эта шпаргалка"
+      echo "  ''${Y}Alt+Shift''${R}          Раскладка US/RU"
+      echo ""
+      echo "''${H}  ─── МЫШЬ ───''${R}"
+      echo "  ''${Y}Super+ЛКМ''${R}          Перетаскивать"
+      echo "  ''${Y}Super+ПКМ''${R}          Изменить размер"
+      echo ""
+      read -n 1 -s -r
+    '')
+
     # CLI утилиты
     eza           # современный ls
     bat           # cat с подсветкой
