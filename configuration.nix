@@ -101,7 +101,7 @@
     # Hyprland ecosystem
     # -------------------------------------------------------------------------
     waybar
-    wofi
+    rofi
     pavucontrol
     hyprpaper
     hyprlock
@@ -197,6 +197,7 @@
     pkg-config
     clang
     ranger             # файловый менеджер TUI
+    claude-code
 
     # -------------------------------------------------------------------------
     # Веб-разработка
@@ -260,6 +261,7 @@
     enable = true;
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
+    extraPackages = with pkgs; [ gamescope ];
   };
 
   # ===========================================================================
@@ -355,7 +357,7 @@
   # УПРАВЛЕНИЕ ПИТАНИЕМ
   # ===========================================================================
   services.logind = {
-    lidSwitch = "suspend";
+    lidSwitch = "ignore";
     lidSwitchExternalPower = "ignore";
     lidSwitchDocked = "ignore";
   };

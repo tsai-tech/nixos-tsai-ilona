@@ -116,73 +116,76 @@
 
     # Шпаргалка по хоткеям (Super+/)
     (writeShellScriptBin "keybinds" ''
-      C='\033[36m'    # cyan
-      Y='\033[33m'    # yellow
-      B='\033[1m'     # bold
-      R='\033[0m'     # reset
-      H="''${B}''${C}" # header
-
-      echo ""
-      echo "''${H}  ─── ПРИЛОЖЕНИЯ ───''${R}"
-      echo "  ''${Y}Super+Enter''${R}        Терминал"
-      echo "  ''${Y}Super+D''${R}            Лаунчер"
-      echo "  ''${Y}Super+R''${R}            Запуск команды"
-      echo "  ''${Y}Super+E''${R}            Файлы"
-      echo "  ''${Y}Super+B''${R}            Firefox"
-      echo "  ''${Y}Super+L''${R}            Блокировка"
-      echo "  ''${Y}Super+M''${R}            Меню выхода"
-      echo "  ''${Y}Super+Shift+M''${R}      Выход из Hyprland"
-      echo ""
-      echo "''${H}  ─── ОКНА ───''${R}"
-      echo "  ''${Y}Super+Q''${R}            Закрыть окно"
-      echo "  ''${Y}Super+V''${R}            Плавающее"
-      echo "  ''${Y}Super+F''${R}            Полный экран"
-      echo "  ''${Y}Super+Shift+F''${R}      Максимизация"
-      echo "  ''${Y}Super+T''${R}            Поверх всех"
-      echo "  ''${Y}Super+C''${R}            Центрировать"
-      echo "  ''${Y}Super+P''${R}            Pseudo-tile"
-      echo "  ''${Y}Super+J''${R}            Переключить split"
-      echo "  ''${Y}Super+G''${R}            Группа окон"
-      echo "  ''${Y}Super+Tab''${R}          След. в группе"
-      echo ""
-      echo "''${H}  ─── ФОКУС / ПЕРЕМЕЩЕНИЕ ───''${R}"
-      echo "  ''${Y}Super+←↑↓→''${R}        Фокус"
-      echo "  ''${Y}Super+H/K  Alt+J''${R}   Фокус (vim)"
-      echo "  ''${Y}Alt+Tab''${R}            Циклический фокус"
-      echo "  ''${Y}Super+Shift+←↑↓→''${R}  Переместить окно"
-      echo "  ''${Y}Super+Shift+HJKL''${R}   Переместить (vim)"
-      echo "  ''${Y}Super+Ctrl+←↑↓→''${R}   Размер окна"
-      echo "  ''${Y}Super+Ctrl+HJKL''${R}    Размер (vim)"
-      echo "  ''${Y}Ctrl+Shift+←↑↓→''${R}   Swap с соседом"
-      echo ""
-      echo "''${H}  ─── РАБОЧИЕ СТОЛЫ ───''${R}"
-      echo "  ''${Y}Super+1-0''${R}          Переключить 1-10"
-      echo "  ''${Y}Super+Shift+1-0''${R}    Переместить окно"
-      echo "  ''${Y}Super+Alt+1-5''${R}      Переместить тихо"
-      echo "  ''${Y}Super+[ ]''${R}          Пред./след."
-      echo "  ''${Y}Super+Колесо''${R}       Прокрутка столов"
-      echo "  ''${Y}Super+S''${R}            Scratchpad"
-      echo "  ''${Y}Super+Shift+S''${R}      В scratchpad"
-      echo ""
-      echo "''${H}  ─── СКРИНШОТЫ ───''${R}"
-      echo "  ''${Y}Print''${R}              Область → буфер"
-      echo "  ''${Y}Shift+Print''${R}        Экран → буфер"
-      echo "  ''${Y}Super+Print''${R}        Область → Swappy"
-      echo "  ''${Y}Super+Shift+Print''${R}  Экран → Swappy"
-      echo "  ''${Y}Alt+Print''${R}          Окно → буфер"
-      echo ""
-      echo "''${H}  ─── УТИЛИТЫ ───''${R}"
-      echo "  ''${Y}Super+X''${R}            История буфера"
-      echo "  ''${Y}Super+Shift+C''${R}      Пипетка цвета"
-      echo "  ''${Y}Super+/''${R}            Эта шпаргалка"
-      echo "  ''${Y}Alt+Shift''${R}          Раскладка US/RU"
-      echo ""
-      echo "''${H}  ─── МЫШЬ ───''${R}"
-      echo "  ''${Y}Super+ЛКМ''${R}          Перетаскивать"
-      echo "  ''${Y}Super+ПКМ''${R}          Изменить размер"
-      echo ""
-      read -n 1 -s -r
-    '')
+        printf "\033[36m\033[1m  ─── ПРИЛОЖЕНИЯ ───\033[0m\n"
+        printf "  \033[33mSuper+Enter\033[0m        Терминал\n"
+        printf "  \033[33mSuper+D\033[0m            Rofi (приложения)\n"
+        printf "  \033[33mSuper+R\033[0m            Запуск команды\n"
+        printf "  \033[33mSuper+E\033[0m            Файлы\n"
+        printf "  \033[33mSuper+B\033[0m            Firefox\n"
+        printf "  \033[33mSuper+L\033[0m            Блокировка\n"
+        printf "  \033[33mSuper+M\033[0m            Меню выхода\n"
+        printf "  \033[33mSuper+Shift+M\033[0m      Выход из Hyprland\n"
+        printf "\n"
+        printf "\033[36m\033[1m  ─── ОКНА ───\033[0m\n"
+        printf "  \033[33mSuper+Q\033[0m            Закрыть окно\n"
+        printf "  \033[33mSuper+V\033[0m            Плавающее\n"
+        printf "  \033[33mSuper+F\033[0m            Полный экран\n"
+        printf "  \033[33mSuper+Shift+F\033[0m      Максимизация\n"
+        printf "  \033[33mSuper+T\033[0m            Поверх всех\n"
+        printf "  \033[33mSuper+C\033[0m            Центрировать\n"
+        printf "  \033[33mSuper+P\033[0m            Pseudo-tile\n"
+        printf "  \033[33mSuper+J\033[0m            Переключить split\n"
+        printf "  \033[33mSuper+G\033[0m            Группа окон\n"
+        printf "  \033[33mSuper+Tab\033[0m          След. в группе\n"
+        printf "  \033[33mSuper+Shift+Tab\033[0m    Пред. в группе\n"
+        printf "\n"
+        printf "\033[36m\033[1m  ─── ФОКУС ───\033[0m\n"
+        printf "  \033[33mSuper+←↑↓→\033[0m        Фокус\n"
+        printf "  \033[33mSuper+H/K\033[0m          Фокус влево/вверх\n"
+        printf "  \033[33mAlt+J\033[0m              Фокус вниз\n"
+        printf "  \033[33mAlt+Tab\033[0m            Циклический фокус\n"
+        printf "\n"
+        printf "\033[36m\033[1m  ─── ПЕРЕМЕЩЕНИЕ ОКОН ───\033[0m\n"
+        printf "  \033[33mSuper+Shift+←↑↓→\033[0m  Переместить\n"
+        printf "  \033[33mSuper+Shift+HJKL\033[0m   Переместить (vim)\n"
+        printf "  \033[33mSuper+Ctrl+←↑↓→\033[0m   Размер окна\n"
+        printf "  \033[33mSuper+Ctrl+HJKL\033[0m    Размер (vim)\n"
+        printf "  \033[33mSuper+Ctrl+Shift+←↑↓→\033[0m Swap\n"
+        printf "\n"
+        printf "\033[36m\033[1m  ─── РАБОЧИЕ СТОЛЫ ───\033[0m\n"
+        printf "  \033[33mSuper+1-0\033[0m          Переключить 1-10\n"
+        printf "  \033[33mSuper+Shift+1-0\033[0m    Переместить окно\n"
+        printf "  \033[33mSuper+Alt+1-5\033[0m      Переместить тихо\n"
+        printf "  \033[33mSuper+[ ]\033[0m          Пред./след.\n"
+        printf "  \033[33mCtrl+Alt+←→\033[0m       Пред./след.\n"
+        printf "  \033[33mSuper+Колесо\033[0m       Прокрутка столов\n"
+        printf "  \033[33mSuper+S\033[0m            Scratchpad\n"
+        printf "  \033[33mSuper+Shift+S\033[0m      В scratchpad\n"
+        printf "\n"
+        printf "\033[36m\033[1m  ─── СКРИНШОТЫ ───\033[0m\n"
+        printf "  \033[33mPrint\033[0m              Область → буфер\n"
+        printf "  \033[33mShift+Print\033[0m        Экран → буфер\n"
+        printf "  \033[33mSuper+Print\033[0m        Область → Swappy\n"
+        printf "  \033[33mSuper+Shift+Print\033[0m  Экран → Swappy\n"
+        printf "  \033[33mAlt+Print\033[0m          Окно → буфер\n"
+        printf "\n"
+        printf "\033[36m\033[1m  ─── УТИЛИТЫ ───\033[0m\n"
+        printf "  \033[33mSuper+X\033[0m            История буфера\n"
+        printf "  \033[33mSuper+Shift+C\033[0m      Пипетка цвета\n"
+        printf "  \033[33mSuper+/\033[0m            Эта шпаргалка\n"
+        printf "  \033[33mAlt+Shift\033[0m          Раскладка US/RU\n"
+        printf "\n"
+        printf "\033[36m\033[1m  ─── МЫШЬ ───\033[0m\n"
+        printf "  \033[33mSuper+ЛКМ\033[0m          Перетаскивать\n"
+        printf "  \033[33mSuper+ПКМ\033[0m          Изменить размер\n"
+        printf "\n"
+        printf "\033[36m\033[1m  ─── МЕДИА ───\033[0m\n"
+        printf "  \033[33mFn+громкость\033[0m       Громкость\n"
+        printf "  \033[33mFn+яркость\033[0m         Яркость\n"
+        printf "\n"
+        printf "\033[90mНажми любую клавишу...\033[0m"
+        read -n 1 -s -r
+      '')
 
     # CLI утилиты
     eza           # современный ls
@@ -382,55 +385,133 @@
   '';
 
   # ===========================================================================
-  # WOFI (лаунчер)
+  # ROFI (лаунчер)
   # ===========================================================================
-  xdg.configFile."wofi/style.css".text = ''
+  programs.rofi = {
+    enable = true;
+    package = pkgs.rofi;
+    terminal = "${pkgs.kitty}/bin/kitty";
+    theme = "custom";
+    extraConfig = {
+      modi = "drun,run,window,filebrowser";
+      show-icons = true;
+      icon-theme = "Papirus-Dark";
+      display-drun = " Apps";
+      display-run = " Run";
+      display-window = " Windows";
+      display-filebrowser = " Files";
+      drun-display-format = "{name}";
+      window-format = "{w} · {c} · {t}";
+      font = "FiraCode Nerd Font 12";
+      drun-match-fields = "name,generic,exec,categories,keywords";
+      drun-categories = "";
+      matching = "fuzzy";
+      sort = true;
+      sorting-method = "fzf";
+    };
+  };
+
+  xdg.configFile."rofi/custom.rasi".text = ''
+    * {
+      bg: #1a1a1aee;
+      bg-alt: #2a2a2a;
+      fg: #d0d0d0;
+      fg-alt: #808080;
+      accent: #33ccff;
+      urgent: #ff6666;
+
+      background-color: transparent;
+      text-color: @fg;
+      margin: 0;
+      padding: 0;
+      spacing: 0;
+    }
+
     window {
-      margin: 0px;
-      border: 2px solid #33ccff;
+      width: 600px;
+      background-color: @bg;
+      border: 2px solid;
+      border-color: @accent;
       border-radius: 10px;
-      background-color: rgba(26, 26, 26, 0.95);
     }
 
-    #input {
-      margin: 5px;
-      border: none;
-      color: #d0d0d0;
-      background-color: #2a2a2a;
-      border-radius: 5px;
-      padding: 10px;
+    mainbox {
+      padding: 12px;
     }
 
-    #inner-box {
-      margin: 5px;
-      border: none;
-      background-color: transparent;
+    inputbar {
+      background-color: @bg-alt;
+      border-radius: 8px;
+      padding: 8px 12px;
+      spacing: 8px;
+      children: [prompt, entry];
     }
 
-    #outer-box {
-      margin: 5px;
-      border: none;
-      background-color: transparent;
+    prompt {
+      text-color: @accent;
     }
 
-    #scroll {
-      margin: 0px;
-      border: none;
+    entry {
+      placeholder: "Search...";
+      placeholder-color: @fg-alt;
     }
 
-    #text {
-      margin: 5px;
-      border: none;
-      color: #d0d0d0;
+    message {
+      margin: 12px 0 0;
+      border-radius: 8px;
+      background-color: @bg-alt;
     }
 
-    #entry {
-      border-radius: 5px;
+    textbox {
+      padding: 8px;
     }
 
-    #entry:selected {
-      background-color: #33ccff;
-      color: #1a1a1a;
+    listview {
+      lines: 10;
+      columns: 1;
+      fixed-height: true;
+      margin: 12px 0 0;
+      spacing: 4px;
+    }
+
+    element {
+      padding: 8px 12px;
+      border-radius: 8px;
+      spacing: 12px;
+    }
+
+    element normal normal {
+      text-color: @fg;
+    }
+
+    element normal urgent {
+      text-color: @urgent;
+    }
+
+    element normal active {
+      text-color: @accent;
+    }
+
+    element selected {
+      background-color: @accent;
+    }
+
+    element selected normal, element selected active {
+      text-color: #1a1a1a;
+    }
+
+    element selected urgent {
+      background-color: @urgent;
+    }
+
+    element-icon {
+      size: 1.2em;
+      vertical-align: 0.5;
+    }
+
+    element-text {
+      text-color: inherit;
+      vertical-align: 0.5;
     }
   '';
 }

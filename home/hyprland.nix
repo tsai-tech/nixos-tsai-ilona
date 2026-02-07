@@ -7,9 +7,9 @@
     # МОНИТОР
     # ==========================================================================
     # Внешний монитор (имя уточнить через hyprctl monitors)
-    monitor = DP-1, 3440x1440@100, 0x0, 1
+    monitor = HDMI-A-1, 3440x1440@100, 0x0, 1.25
     # Встроенный дисплей ноутбука
-    monitor = eDP-1, preferred, auto, 1
+    monitor = eDP-1, preferred, auto, 1.25
     # Fallback
     monitor = , preferred, auto, 1
 
@@ -25,9 +25,18 @@
     env = NVD_BACKEND,direct
     env = ELECTRON_OZONE_PLATFORM_HINT,auto
 
+    env = GDK_SCALE,1
+    env = GDK_SCALE,1
+    
+    xwayland {
+      force_zero_scaling = true
+    }
+
     # ==========================================================================
     # АВТОЗАПУСК
     # ==========================================================================
+    # Проверка состояния крышки при старте и при reload конфига
+    exec = grep -q closed /proc/acpi/button/lid/LID0/state && hyprctl keyword monitor eDP-1,disable
     exec-once = waybar
     exec-once = nm-applet --indicator
     exec-once = hyprpaper
@@ -129,8 +138,8 @@
     bind = $mod, RETURN, exec, kitty
     bind = $mod, Q, killactive,
     bind = $mod, E, exec, nautilus
-    bind = $mod, D, exec, wofi --show drun
-    bind = $mod, R, exec, wofi --show run
+    bind = $mod, D, exec, rofi -show drun -show-icons
+    bind = $mod, R, exec, rofi -show run
     bind = $mod, L, exec, hyprlock
     bind = $mod, B, exec, firefox
 
@@ -139,7 +148,7 @@
     bind = $mod SHIFT, M, exit,
 
     # История буфера обмена
-    bind = $mod, X, exec, cliphist list | wofi --dmenu | cliphist decode | wl-copy
+    bind = $mod, X, exec, cliphist list | rofi -dmenu -display-columns 2 | cliphist decode | wl-copy
 
     # Пипетка цветов
     bind = $mod SHIFT, C, exec, hyprpicker -a
@@ -235,6 +244,8 @@
     # Следующий/предыдущий рабочий стол
     bind = $mod, bracketright, workspace, e+1
     bind = $mod, bracketleft, workspace, e-1
+    bind = CTRL ALT, right, workspace, r+1
+    bind = CTRL ALT, left, workspace, r-1
 
     # ==========================================================================
     # ПЕРЕМЕЩЕНИЕ ОКОН НА РАБОЧИЕ СТОЛЫ
@@ -296,6 +307,9 @@
     # ==========================================================================
     bindel = , XF86MonBrightnessUp, exec, swayosd-client --brightness raise
     bindel = , XF86MonBrightnessDown, exec, swayosd-client --brightness lower
+    
+    bindl = , switch:on:Lid Switch, exec, hyprctl keyword monitor "eDP-1,disable"
+    bindl = , switch:off:Lid Switch, exec, hyprctl keyword monitor "eDP-1,preferred,auto,1"
 
     # ==========================================================================
     # CAPS LOCK OSD
@@ -306,57 +320,62 @@
     # ПРАВИЛА ДЛЯ ОКОН
     # ==========================================================================
     # Плавающие окна для диалогов
-    windowrulev2 = float, class:^(pavucontrol)$
-    windowrulev2 = float, class:^(nm-connection-editor)$
-    windowrulev2 = float, class:^(blueman-manager)$
-    windowrulev2 = float, class:^(.blueman-manager-wrapped)$
-    windowrulev2 = float, title:^(Open File)$
-    windowrulev2 = float, title:^(Save File)$
-    windowrulev2 = float, title:^(Volume Control)$
-    windowrulev2 = float, class:^(imv)$
-    windowrulev2 = float, class:^(mpv)$
-    windowrulev2 = float, class:^(gnome-calculator)$
-    windowrulev2 = float, class:^(org.gnome.Calculator)$
-    windowrulev2 = float, title:^(Picture-in-Picture)$
-    windowrulev2 = float, class:^(xdg-desktop-portal-gtk)$
-    windowrulev2 = float, class:^(cheatsheet)$
-    windowrulev2 = size 520 820, class:^(cheatsheet)$
+    windowrule = float on, match:class pavucontrol
+    windowrule = float on, match:class nm-connection-editor
+    windowrule = float on, match:class blueman-manager
+    windowrule = float on, match:class blueman-manager-wrapped
+    windowrule = float on, match:title Open File
+    windowrule = float on, match:title Save File
+    windowrule = float on, match:title Volume Control
+    windowrule = float on, match:class imv
+    windowrule = float on, match:class mpv
+    windowrule = float on, match:class gnome-calculator
+    windowrule = float on, match:class org.gnome.Calculator
+    windowrule = float on, match:title Picture-in-Picture
+    windowrule = float on, match:class xdg-desktop-portal-gtk
+    windowrule = float on, match:class cheatsheet
+    windowrule = size 520 820, match:class cheatsheet
 
     # Размеры для плавающих
-    windowrulev2 = size 800 600, class:^(pavucontrol)$
-    windowrulev2 = size 800 600, class:^(blueman-manager)$
+    windowrule = size 800 600, match:class pavucontrol
+    windowrule = size 800 600, match:class blueman-manager
 
     # Центрировать плавающие
-    windowrulev2 = center, floating:1
+    windowrule = center on, match:class pavucontrol
+    windowrule = center on, match:class blueman-manager
+    windowrule = center on, match:class blueman-manager-wrapped
+    windowrule = center on, match:class nm-connection-editor
+    windowrule = center on, match:class xdg-desktop-portal-gtk
+    windowrule = center on, match:class cheatsheet
+    windowrule = center on, match:class imv
+    windowrule = center on, match:class mpv
+
 
     # Прозрачность только для терминала
-    windowrulev2 = opacity 0.95, class:^(kitty)$
+    windowrule = opacity 0.95, match:class kitty
 
     # Picture-in-Picture поверх всех
-    windowrulev2 = pin, title:^(Picture-in-Picture)$
-    windowrulev2 = keepaspectratio, title:^(Picture-in-Picture)$
+    windowrule = pin on, match:title Picture-in-Picture
+    windowrule = keep_aspect_ratio on, match:title Picture-in-Picture
 
     # Steam
-    windowrulev2 = float, class:^(steam)$, title:^(Friends List)$
-    windowrulev2 = float, class:^(steam)$, title:^(Steam Settings)$
+    windowrule = float on, match:class steam, match:title Friends List
+    windowrule = float on, match:class steam, match:title Steam Settings
 
     # Игры на полный экран
-    windowrulev2 = fullscreen, class:^(steam_app_.*)$
-    windowrulev2 = immediate, class:^(steam_app_.*)$
+    windowrule = fullscreen on, match:class ^(steam_app_.*)$
+    windowrule = immediate on, match:class ^(steam_app_.*)$
+    windowrule = no_blur on, match:class steam
 
     # Отключить blur для видео
-    windowrulev2 = noblur, class:^(mpv)$
-    windowrulev2 = noblur, fullscreen:1
+    windowrule = no_blur on, match:class mpv
+    windowrule = no_blur on, match:fullscreen 1
 
     # ==========================================================================
     # ЖЕСТЫ ТАЧПАДА
     # ==========================================================================
-    gestures {
-      workspace_swipe = true
-      workspace_swipe_fingers = 3
-      workspace_swipe_distance = 300
-      workspace_swipe_cancel_ratio = 0.5
-    }
+    gesture = 3, horizontal, workspace
+    
   '';
 
   # Hypridle - автоблокировка
