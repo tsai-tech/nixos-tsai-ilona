@@ -6,11 +6,18 @@
     # ==========================================================================
     # МОНИТОР
     # ==========================================================================
-    # Внешний монитор (основной)
+    # External monitors - PRIMARY at position 0x0
     monitor = HDMI-A-1, 3440x1440@100, 0x0, 1.25
-    # Встроенный дисплей ноутбука (под основным, будет отключен если HDMI есть)
-    monitor = eDP-2, preferred, auto-down, 1.25
-    # Fallback
+    monitor = DP-1, 3440x1440@100, 0x0, 1.25
+    monitor = DP-2, 3440x1440@100, 0x0, 1.25
+    monitor = DP-3, 3440x1440@100, 0x0, 1.25
+
+    # Built-in laptop display - auto position to avoid overlap warning
+    # (will be disabled by exec-once when external monitor is connected)
+    monitor = eDP-1, preferred, auto, 1.25
+    monitor = eDP-2, preferred, auto, 1.25
+
+    # Fallback for any unknown monitor
     monitor = , preferred, auto, 1
 
     # ==========================================================================
@@ -35,8 +42,9 @@
     # ==========================================================================
     # АВТОЗАПУСК
     # ==========================================================================
-    # Управление мониторами: если HDMI есть - отключить eDP-2, иначе включить
-    exec = hyprctl monitors -j | grep -q HDMI-A-1 && hyprctl keyword monitor eDP-2,disable || hyprctl keyword monitor "eDP-2,preferred,0x0,1.25"
+    # Disable laptop monitor if external monitor is connected (exec, not exec-once, to run on reload too)
+    exec = sleep 0.5 && hyprctl monitors | grep -q "HDMI-A-1\|DP-1\|DP-2\|DP-3" && hyprctl keyword monitor "eDP-1,disable" && hyprctl keyword monitor "eDP-2,disable"
+
     exec-once = waybar
     exec-once = nm-applet --indicator
     exec-once = hyprpaper
@@ -311,8 +319,9 @@
     bindel = , XF86MonBrightnessUp, exec, swayosd-client --brightness raise
     bindel = , XF86MonBrightnessDown, exec, swayosd-client --brightness lower
     
-    bindl = , switch:on:Lid Switch, exec, hyprctl keyword monitor "eDP-2,disable"
-    bindl = , switch:off:Lid Switch, exec, hyprctl keyword monitor "eDP-2,preferred,0x0,1.25"
+    # Lid switch handling - disable laptop monitor when lid closed, enable when open
+    bindl = , switch:on:Lid Switch, exec, hyprctl keyword monitor "eDP-1,disable" && hyprctl keyword monitor "eDP-2,disable"
+    bindl = , switch:off:Lid Switch, exec, hyprctl keyword monitor "eDP-1,preferred,auto,1.25" && hyprctl keyword monitor "eDP-2,preferred,auto,1.25"
 
     # ==========================================================================
     # CAPS LOCK OSD
