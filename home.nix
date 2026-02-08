@@ -239,6 +239,33 @@
   home.file."Pictures/Screenshots/.keep".text = "";
 
   # ===========================================================================
+  # WALLPAPER ROTATION (awww)
+  # ===========================================================================
+  systemd.user.services.wallpaper-rotate = {
+    Unit = {
+      Description = "Rotate wallpaper using awww";
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.findutils}/bin/find /etc/nixos/wallpapers -type f \\( -name \"*.jpg\" -o -name \"*.png\" -o -name \"*.jpeg\" -o -name \"*.webp\" \\) | ${pkgs.coreutils}/bin/shuf -n 1 | ${pkgs.findutils}/bin/xargs awww img --transition-type grow --transition-pos center'";
+    };
+  };
+
+  systemd.user.timers.wallpaper-rotate = {
+    Unit = {
+      Description = "Rotate wallpaper every 30 minutes";
+    };
+    Timer = {
+      OnCalendar = "*:0/30";  # Every 30 minutes
+      Persistent = true;
+    };
+    Install = {
+      WantedBy = [ "timers.target" ];
+    };
+  };
+
+  # ===========================================================================
   # КУРСОР
   # ===========================================================================
   home.pointerCursor = {

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, awww, ... }:
 
 {
   imports = [ ./hardware-configuration.nix ];
@@ -116,7 +116,7 @@
     waybar
     rofi
     pavucontrol
-    hyprpaper
+    awww.packages.${pkgs.stdenv.hostPlatform.system}.awww
     hyprlock
     hypridle
     kitty

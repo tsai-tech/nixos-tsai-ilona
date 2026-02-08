@@ -47,7 +47,7 @@
 
     exec-once = waybar
     exec-once = nm-applet --indicator
-    exec-once = hyprpaper
+    exec-once = awww-daemon && sleep 0.5 && awww img /etc/nixos/wallpapers
     exec-once = hypridle
     exec-once = mako
     exec-once = wl-paste --type text --watch cliphist store
@@ -459,10 +459,4 @@
     }
   '';
 
-  # Hyprpaper - обои
-  xdg.configFile."hypr/hyprpaper.conf".text = ''
-    preload = /home/leet/.config/hypr/wallpaper.jpg
-    wallpaper = ,/home/leet/.config/hypr/wallpaper.jpg
-    splash = false
-  '';
 }
