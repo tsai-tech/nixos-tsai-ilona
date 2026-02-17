@@ -1,5 +1,64 @@
 { config, pkgs, awww, ... }:
 
+let
+  # =========================================================================
+  # Корпоративные приложения (из /opt/, установлены вручную)
+  # =========================================================================
+  chromiumDeps = pkgs: with pkgs; [
+    glib gtk3 nss nspr dbus atk at-spi2-atk cups
+    pango cairo libx11 libxcomposite libxdamage
+    libxext libxfixes libxrandr mesa expat
+    libxcb libxkbcommon systemd alsa-lib
+    libdrm libgbm fontconfig freetype vulkan-loader
+    libGL wayland pipewire libpulseaudio
+    libnotify gdk-pixbuf libsecret zlib
+  ];
+
+  time-desktop = let
+    fhs = pkgs.buildFHSEnv {
+      name = "time-desktop";
+      targetPkgs = chromiumDeps;
+      runScript = "/opt/time-desktop/time-desktop";
+      profile = ''
+        export TZ="${config.time.timeZone}"
+      '';
+    };
+    desktopItem = pkgs.makeDesktopItem {
+      name = "time-desktop";
+      desktopName = "Time Desktop";
+      exec = "time-desktop %U";
+      icon = "/opt/time-desktop/app_icon.png";
+      categories = [ "Office" ];
+    };
+  in pkgs.symlinkJoin {
+    name = "time-desktop";
+    paths = [ fhs desktopItem ];
+  };
+
+  yandex-browser = let
+    fhs = pkgs.buildFHSEnv {
+      name = "yandex-browser";
+      targetPkgs = pkgs: (chromiumDeps pkgs) ++ (with pkgs; [
+        wget xdg-utils jq
+      ]);
+      runScript = "/opt/yandex-browser/opt/yandex/browser/yandex-browser";
+    };
+    desktopItem = pkgs.makeDesktopItem {
+      name = "yandex-browser";
+      desktopName = "Yandex Browser";
+      exec = "yandex-browser %U";
+      icon = "/opt/yandex-browser/opt/yandex/browser/product_logo_256.png";
+      categories = [ "Network" "WebBrowser" ];
+      mimeTypes = [
+        "text/html" "application/xhtml+xml"
+        "x-scheme-handler/http" "x-scheme-handler/https"
+      ];
+    };
+  in pkgs.symlinkJoin {
+    name = "yandex-browser";
+    paths = [ fhs desktopItem ];
+  };
+in
 {
   imports = [ ./hardware-configuration.nix ];
 
@@ -52,6 +111,18 @@
 
   # Сеть
   networking.hostName = "nixos";
+  networking.extraHosts = ''
+    127.0.0.1 teacher.test-y161.skyeng.link
+    127.0.0.1 teachers.test-y161.skyeng.link
+    127.0.0.1 acv.test-y161.skyeng.link
+    127.0.0.1 onboarding.test-y161.skyeng.link
+    127.0.0.1 trm.test-y161.skyeng.link
+    ::1 teacher.test-y161.skyeng.link
+    ::1 teachers.test-y161.skyeng.link
+    ::1 acv.test-y161.skyeng.link
+    ::1 onboarding.test-y161.skyeng.link
+    ::1 trm.test-y161.skyeng.link
+  '';
   networking.networkmanager = {
     enable = true;
     plugins = [ pkgs.networkmanager-openvpn ];
@@ -153,6 +224,12 @@
     # Браузеры
     # -------------------------------------------------------------------------
     firefox
+    yandex-browser         # корпоративный (FHS из /opt/)
+
+    # -------------------------------------------------------------------------
+    # Корпоративные приложения (FHS из /opt/)
+    # -------------------------------------------------------------------------
+    time-desktop
 
     # -------------------------------------------------------------------------
     # Коммуникации
@@ -295,8 +372,24 @@
     wesnoth
     dwarf-fortress
     xonotic
+    # Beyond All Reason — обёртка для NVIDIA: форсируем X11/GLX рендеринг,
+    # т.к. Wayland EGL в FHS-песочнице подхватывает Intel вместо NVIDIA
+    (pkgs.runCommand "beyond-all-reason-nvidia" {
+      nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
+    } ''
+      mkdir -p $out/bin $out/share
+      makeBinaryWrapper ${pkgs.beyond-all-reason}/bin/beyond-all-reason $out/bin/beyond-all-reason \
+        --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:/run/opengl-driver-32/lib \
+        --set __GLX_VENDOR_LIBRARY_NAME nvidia \
+        --set LIBVA_DRIVER_NAME nvidia \
+        --set SDL_VIDEO_DRIVER x11
+      ln -s ${pkgs.beyond-all-reason}/share/applications $out/share/applications
+      ln -s ${pkgs.beyond-all-reason}/share/icons $out/share/icons
+    '')
     ultrastardx          # UltraStar Deluxe
     superTux             # SuperTux platformer
+    superTuxKart         # SuperTuxKart 3D racer
+    nwjs                 # NW.js — для запуска HTML5/Node.js игр
 
     # -------------------------------------------------------------------------
     # Пароли

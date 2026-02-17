@@ -426,6 +426,10 @@
     windowrule = immediate on, match:class ^(steam_app_.*)$
     windowrule = no_blur on, match:class steam
 
+    # SuperTux2 — отключить VSync композитора (убирает лаг от двойной синхронизации)
+    windowrule = immediate on, match:class ^(SuperTux.*)$
+    windowrule = no_blur on, match:class ^(SuperTux.*)$
+
     # Отключить blur для видео
     windowrule = no_blur on, match:class mpv
     windowrule = no_blur on, match:fullscreen 1
@@ -452,20 +456,16 @@
     }
 
     listener {
-      timeout = 600
+      timeout = 1200
       on-timeout = hyprlock
     }
 
     listener {
-      timeout = 900
+      timeout = 1800
       on-timeout = hyprctl dispatch dpms off
       on-resume = hyprctl dispatch dpms on
     }
 
-    listener {
-      timeout = 1800
-      on-timeout = systemctl suspend
-    }
   '';
 
   # Hyprlock - экран блокировки

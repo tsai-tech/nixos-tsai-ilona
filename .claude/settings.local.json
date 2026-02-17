@@ -15,7 +15,13 @@
       "WebFetch(domain:developer.nvidia.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:deepwiki.com)",
-      "WebFetch(domain:code.hyprland.org)"
+      "WebFetch(domain:code.hyprland.org)",
+      "Bash(ls:*)",
+      "Bash(readlink:*)",
+      "Bash(ldd:*)",
+      "Bash(/opt/time-desktop/time-desktop:*)",
+      "Bash(timeout 10 time-desktop:*)",
+      "Bash(timeout 10 sudo:*)"
     ]
   }
 }
