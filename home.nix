@@ -207,6 +207,15 @@
   # Создаём директорию для скриншотов
   home.file."Pictures/Screenshots/.keep".text = "";
 
+  # Стандартная обоина (копируется при активации, Илона может удалить/заменить)
+  home.activation.copyDefaultWallpaper = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    mkdir -p "$HOME/Pictures/Wallpapers"
+    if [ -z "$(ls -A "$HOME/Pictures/Wallpapers/" 2>/dev/null)" ]; then
+      cp ${./default-wallpaper.jpg} "$HOME/Pictures/Wallpapers/default.jpg"
+      chmod 644 "$HOME/Pictures/Wallpapers/default.jpg"
+    fi
+  '';
+
   # ===========================================================================
   # WALLPAPER ROTATION (awww)
   # ===========================================================================
@@ -221,7 +230,7 @@
         "WAYLAND_DISPLAY=wayland-1"
         "DISPLAY=:0"
       ];
-      ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.findutils}/bin/find /etc/nixos/wallpapers -type f \\( -name \"*.jpg\" -o -name \"*.png\" -o -name \"*.jpeg\" -o -name \"*.webp\" \\) | ${pkgs.coreutils}/bin/shuf -n 1 | ${pkgs.findutils}/bin/xargs /run/current-system/sw/bin/awww img --transition-type grow --transition-pos center'";
+      ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.findutils}/bin/find /home/ilona/Pictures/Wallpapers -type f \\( -name \"*.jpg\" -o -name \"*.png\" -o -name \"*.jpeg\" -o -name \"*.webp\" \\) | ${pkgs.coreutils}/bin/shuf -n 1 | ${pkgs.findutils}/bin/xargs /run/current-system/sw/bin/awww img --transition-type grow --transition-pos center'";
     };
   };
 

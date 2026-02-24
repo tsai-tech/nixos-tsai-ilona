@@ -41,7 +41,7 @@
 
     exec-once = waybar
     exec-once = nm-applet --indicator
-    exec-once = awww-daemon && sleep 0.5 && find /etc/nixos/wallpapers -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.jpeg" -o -name "*.webp" \) | shuf -n 1 | xargs awww img --transition-type grow --transition-pos center
+    exec-once = awww-daemon && sleep 0.5 && find $HOME/Pictures/Wallpapers -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.jpeg" -o -name "*.webp" \) | shuf -n 1 | xargs awww img --transition-type grow --transition-pos center
     exec-once = hypridle
     exec-once = mako
     exec-once = wl-paste --type text --watch cliphist store
@@ -164,7 +164,7 @@
     bind = $mod, slash, exec, kitty --class cheatsheet -e keybinds
 
     # Смена обоев
-    bind = $mod, W, exec, find /etc/nixos/wallpapers -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.jpeg" -o -name "*.webp" \) | shuf -n 1 | xargs awww img --transition-type grow --transition-pos center
+    bind = $mod, W, exec, find $HOME/Pictures/Wallpapers -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.jpeg" -o -name "*.webp" \) | shuf -n 1 | xargs awww img --transition-type grow --transition-pos center
 
     # Состояние окна
     bind = $mod, V, togglefloating,
