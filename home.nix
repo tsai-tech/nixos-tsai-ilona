@@ -438,6 +438,13 @@ in
   # DESKTOP ENTRIES
   # ===========================================================================
   xdg.desktopEntries = hiddenDesktopEntries // {
+    ktalk = {
+      name = "KTalk";
+      exec = "ktalk";
+      terminal = false;
+      categories = [ "Network" "Chat" ];
+      comment = "KTalk messenger";
+    };
     ultrastardx = {
       name = "UltraStar Deluxe";
       genericName = "Karaoke Game";

@@ -421,10 +421,20 @@
     windowrule = tile on, match:title Battle.net
     windowrule = tile on, match:title Hearthstone
 
-    # Игры на полный экран
+    # Steam-клиент: нотификации не должны красть фокус
+    windowrule = suppress_event activate, match:class ^steam$
+
+    # Игры на полный экран (steam_app_* = Proton, dota2 = нативная Dota)
     windowrule = fullscreen on, match:class ^(steam_app_.*)$
     windowrule = immediate on, match:class ^(steam_app_.*)$
+    windowrule = stay_focused on, match:class ^(steam_app_.*|dota2)$
     windowrule = no_blur on, match:class steam
+
+    # Gamescope — всегда в фокусе, fullscreen, без VSync композитора
+    windowrule = stay_focused on, match:class ^gamescope$
+    windowrule = fullscreen on, match:class ^gamescope$
+    windowrule = immediate on, match:class ^gamescope$
+    windowrule = no_blur on, match:class ^gamescope$
 
     # SuperTux2 — отключить VSync композитора (убирает лаг от двойной синхронизации)
     windowrule = immediate on, match:class ^(SuperTux.*)$

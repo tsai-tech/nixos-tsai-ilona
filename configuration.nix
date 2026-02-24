@@ -42,6 +42,9 @@ let
         wget xdg-utils jq
       ]);
       runScript = "/opt/yandex-browser/opt/yandex/browser/yandex-browser";
+      profile = ''
+        export TZ="${config.time.timeZone}"
+      '';
     };
     desktopItem = pkgs.makeDesktopItem {
       name = "yandex-browser";
@@ -109,6 +112,9 @@ in
     "fbcon=map:1"          # prefer NVIDIA framebuffer for console
   ];
 
+  # Разрешить непривилегированным процессам слушать на портах ≥ 443 (для NX dev-сервера)
+  boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" = 443;
+
   # Сеть
   networking.hostName = "nixos";
   networking.extraHosts = ''
@@ -122,6 +128,16 @@ in
     ::1 acv.test-y161.skyeng.link
     ::1 onboarding.test-y161.skyeng.link
     ::1 trm.test-y161.skyeng.link
+    127.0.0.1 teacher.test-y159.skyeng.link
+    127.0.0.1 teachers.test-y159.skyeng.link
+    127.0.0.1 acv.test-y159.skyeng.link
+    127.0.0.1 onboarding.test-y159.skyeng.link
+    127.0.0.1 trm.test-y159.skyeng.link
+    ::1 teacher.test-y159.skyeng.link
+    ::1 teachers.test-y159.skyeng.link
+    ::1 acv.test-y159.skyeng.link
+    ::1 onboarding.test-y159.skyeng.link
+    ::1 trm.test-y159.skyeng.link
   '';
   networking.networkmanager = {
     enable = true;
@@ -166,6 +182,9 @@ in
     # Базовые утилиты
     # -------------------------------------------------------------------------
     git
+    git-lfs
+    appimage-run
+    (writeShellScriptBin "ktalk" "exec ${appimage-run}/bin/appimage-run /opt/ktalk/ktalk.AppImage \"$@\"")
     wget
     curl
     unzip
@@ -439,6 +458,7 @@ in
     enable = true;
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
+    localNetworkGameTransfers.openFirewall = true;
     extraPackages = with pkgs; [ gamescope ];
   };
 
@@ -547,6 +567,11 @@ in
   # ===========================================================================
   # УПРАВЛЕНИЕ ПИТАНИЕМ
   # ===========================================================================
+  # Профиль производительности — агрессивное охлаждение (кулеры на максимум)
+  systemd.tmpfiles.rules = [
+    "w /sys/firmware/acpi/platform_profile - - - - performance"
+  ];
+
   services.logind.settings.Login = {
     HandleLidSwitch = "ignore";
     HandleLidSwitchExternalPower = "ignore";
@@ -562,7 +587,38 @@ in
   system.activationScripts.flatpak-setup = ''
     ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || true
     ${pkgs.flatpak}/bin/flatpak install -y --noninteractive flathub com.usebottles.bottles || true
+    # Даём Bottles доступ к домашней папке (для инсталляторов и Steam библиотеки)
+    ${pkgs.flatpak}/bin/flatpak override com.usebottles.bottles --filesystem=/home/leet || true
   '';
+
+  # ===========================================================================
+  # SAMBA (расшарить моды BG3 по локалке)
+  # ===========================================================================
+  services.samba = {
+    enable = true;
+    openFirewall = true;
+    settings = {
+      global = {
+        "workgroup" = "WORKGROUP";
+        "server string" = "nixos";
+        "map to guest" = "Bad User";
+        "guest account" = "nobody";
+      };
+      "bg3-mods" = {
+        path = "/home/leet/.local/share/Larian Studios/Baldur's Gate 3/Mods";
+        "read only" = "yes";
+        "guest ok" = "yes";
+        browseable = "yes";
+        "force user" = "leet";
+        comment = "BG3 Mods";
+      };
+    };
+  };
+
+  services.samba-wsdd = {
+    enable = true;
+    openFirewall = true;
+  };
 
   # ===========================================================================
   # JAVA (для Flutter / Android)
