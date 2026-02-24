@@ -1,6 +1,2 @@
 .idea/
 
-# Wallpapers (except default)
-wallpapers/*
-!wallpapers/wallpaper.jpg
-

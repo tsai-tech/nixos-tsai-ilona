@@ -207,13 +207,16 @@
   # Создаём директорию для скриншотов
   home.file."Pictures/Screenshots/.keep".text = "";
 
-  # Стандартная обоина (копируется при активации, Илона может удалить/заменить)
-  home.activation.copyDefaultWallpaper = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  # Обои из репозитория (копируются при активации, Илона может удалить/добавить свои)
+  home.activation.copyWallpapers = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     mkdir -p "$HOME/Pictures/Wallpapers"
-    if [ -z "$(ls -A "$HOME/Pictures/Wallpapers/" 2>/dev/null)" ]; then
-      cp ${./default-wallpaper.jpg} "$HOME/Pictures/Wallpapers/default.jpg"
-      chmod 644 "$HOME/Pictures/Wallpapers/default.jpg"
-    fi
+    for f in ${./wallpapers}/*; do
+      name=$(basename "$f")
+      if [ ! -f "$HOME/Pictures/Wallpapers/$name" ]; then
+        cp "$f" "$HOME/Pictures/Wallpapers/$name"
+        chmod 644 "$HOME/Pictures/Wallpapers/$name"
+      fi
+    done
   '';
 
   # ===========================================================================
