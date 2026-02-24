@@ -6,25 +6,19 @@
     # ==========================================================================
     # МОНИТОР
     # ==========================================================================
-    # External monitors - PRIMARY at position 0x0
-    monitor = HDMI-A-1, 3440x1440@100, 0x0, 1.25
-    monitor = DP-1, 3440x1440@100, 0x0, 1.25
-    monitor = DP-2, 3440x1440@100, 0x0, 1.25
-    monitor = DP-3, 3440x1440@100, 0x0, 1.25
+    # Встроенный экран ноутбука (2560x1440)
+    monitor = eDP-1, 2560x1440, 0x0, 1.25
+    monitor = eDP-2, 2560x1440, 0x0, 1.25
 
-    # Built-in laptop display - auto position to avoid overlap warning
-    # (will be disabled by exec-once when external monitor is connected)
-    monitor = eDP-1, preferred, auto, 1.25
-    monitor = eDP-2, preferred, auto, 1.25
-
-    # Fallback for any unknown monitor
-    monitor = , preferred, auto, 1
+    # Внешний монитор (если подключён — справа от основного)
+    monitor = , preferred, auto-right, 1
 
     # ==========================================================================
     # ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ
     # ==========================================================================
     env = XCURSOR_SIZE,24
     env = QT_QPA_PLATFORMTHEME,qt5ct
+    # TODO: Адаптировать под железо Илоны (убрать если не NVIDIA)
     env = LIBVA_DRIVER_NAME,nvidia
     env = XDG_SESSION_TYPE,wayland
     env = GBM_BACKEND,nvidia-drm
@@ -42,9 +36,6 @@
     # ==========================================================================
     # АВТОЗАПУСК
     # ==========================================================================
-    # Disable laptop monitor if external monitor is connected (exec, not exec-once, to run on reload too)
-    exec = sleep 0.5 && hyprctl monitors | grep -q "HDMI-A-1\|DP-1\|DP-2\|DP-3" && hyprctl keyword monitor "eDP-1,disable" && hyprctl keyword monitor "eDP-2,disable"
-
     # GNOME Keyring для хранения паролей
     exec-once = gnome-keyring-daemon --start --components=secrets
 
@@ -57,6 +48,7 @@
     exec-once = wl-paste --type image --watch cliphist store
     exec-once = swayosd-server
     exec-once = blueman-applet
+    exec-once = nwg-dock-hyprland -d -i 48
 
     # ==========================================================================
     # НАСТРОЙКИ ВВОДА
@@ -149,7 +141,7 @@
     # Приложения
     bind = $mod, RETURN, exec, kitty
     bind = $mod, Q, killactive,
-    bind = $mod, E, exec, thunar
+    bind = $mod, E, exec, nemo
     bind = $mod, D, exec, rofi -show drun -show-icons
     bind = $mod, R, exec, rofi -show run
     bind = $mod, L, exec, hyprlock

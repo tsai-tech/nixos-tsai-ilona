@@ -1,5 +1,5 @@
 {
-  description = "NixOS + Home Manager setup for Mikhail";
+  description = "NixOS + Home Manager setup for Ilona";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -20,7 +20,7 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.leet = import ./home.nix;
+          home-manager.users.ilona = import ./home.nix;
         }
       ];
     in

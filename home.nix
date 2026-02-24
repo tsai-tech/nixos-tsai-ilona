@@ -1,238 +1,19 @@
 { config, pkgs, lib, ... }:
 
-let
-  # Скрываем .desktop файлы аудио плагинов (VST/LV2) из rofi
-  # Они нужны только внутри DAW, не как standalone приложения
-  hiddenPlugins = [
-    # LSP Plugins (190 штук)
-    "in.lsp_plug.lsp_plugins_ab_tester_x2_mono"
-    "in.lsp_plug.lsp_plugins_ab_tester_x2_stereo"
-    "in.lsp_plug.lsp_plugins_ab_tester_x4_mono"
-    "in.lsp_plug.lsp_plugins_ab_tester_x4_stereo"
-    "in.lsp_plug.lsp_plugins_ab_tester_x8_mono"
-    "in.lsp_plug.lsp_plugins_ab_tester_x8_stereo"
-    "in.lsp_plug.lsp_plugins_art_delay_mono"
-    "in.lsp_plug.lsp_plugins_art_delay_stereo"
-    "in.lsp_plug.lsp_plugins_autogain_mono"
-    "in.lsp_plug.lsp_plugins_autogain_stereo"
-    "in.lsp_plug.lsp_plugins_beat_breather_mono"
-    "in.lsp_plug.lsp_plugins_beat_breather_stereo"
-    "in.lsp_plug.lsp_plugins_chorus_mono"
-    "in.lsp_plug.lsp_plugins_chorus_stereo"
-    "in.lsp_plug.lsp_plugins_clipper_mono"
-    "in.lsp_plug.lsp_plugins_clipper_stereo"
-    "in.lsp_plug.lsp_plugins_comp_delay_mono"
-    "in.lsp_plug.lsp_plugins_comp_delay_stereo"
-    "in.lsp_plug.lsp_plugins_comp_delay_x2_stereo"
-    "in.lsp_plug.lsp_plugins_compressor_lr"
-    "in.lsp_plug.lsp_plugins_compressor_mono"
-    "in.lsp_plug.lsp_plugins_compressor_ms"
-    "in.lsp_plug.lsp_plugins_compressor_stereo"
-    "in.lsp_plug.lsp_plugins_crossover_lr"
-    "in.lsp_plug.lsp_plugins_crossover_mono"
-    "in.lsp_plug.lsp_plugins_crossover_ms"
-    "in.lsp_plug.lsp_plugins_crossover_stereo"
-    "in.lsp_plug.lsp_plugins_dyna_processor_lr"
-    "in.lsp_plug.lsp_plugins_dyna_processor_mono"
-    "in.lsp_plug.lsp_plugins_dyna_processor_ms"
-    "in.lsp_plug.lsp_plugins_dyna_processor_stereo"
-    "in.lsp_plug.lsp_plugins_expander_lr"
-    "in.lsp_plug.lsp_plugins_expander_mono"
-    "in.lsp_plug.lsp_plugins_expander_ms"
-    "in.lsp_plug.lsp_plugins_expander_stereo"
-    "in.lsp_plug.lsp_plugins_filter_mono"
-    "in.lsp_plug.lsp_plugins_filter_stereo"
-    "in.lsp_plug.lsp_plugins_flanger_mono"
-    "in.lsp_plug.lsp_plugins_flanger_stereo"
-    "in.lsp_plug.lsp_plugins_gate_lr"
-    "in.lsp_plug.lsp_plugins_gate_mono"
-    "in.lsp_plug.lsp_plugins_gate_ms"
-    "in.lsp_plug.lsp_plugins_gate_stereo"
-    "in.lsp_plug.lsp_plugins_gott_compressor_lr"
-    "in.lsp_plug.lsp_plugins_gott_compressor_mono"
-    "in.lsp_plug.lsp_plugins_gott_compressor_ms"
-    "in.lsp_plug.lsp_plugins_gott_compressor_stereo"
-    "in.lsp_plug.lsp_plugins_graph_equalizer_x16_lr"
-    "in.lsp_plug.lsp_plugins_graph_equalizer_x16_mono"
-    "in.lsp_plug.lsp_plugins_graph_equalizer_x16_ms"
-    "in.lsp_plug.lsp_plugins_graph_equalizer_x16_stereo"
-    "in.lsp_plug.lsp_plugins_graph_equalizer_x32_lr"
-    "in.lsp_plug.lsp_plugins_graph_equalizer_x32_mono"
-    "in.lsp_plug.lsp_plugins_graph_equalizer_x32_ms"
-    "in.lsp_plug.lsp_plugins_graph_equalizer_x32_stereo"
-    "in.lsp_plug.lsp_plugins_impulse_responses_mono"
-    "in.lsp_plug.lsp_plugins_impulse_responses_stereo"
-    "in.lsp_plug.lsp_plugins_impulse_reverb_mono"
-    "in.lsp_plug.lsp_plugins_impulse_reverb_stereo"
-    "in.lsp_plug.lsp_plugins_latency_meter"
-    "in.lsp_plug.lsp_plugins_limiter_mono"
-    "in.lsp_plug.lsp_plugins_limiter_stereo"
-    "in.lsp_plug.lsp_plugins_loud_comp_mono"
-    "in.lsp_plug.lsp_plugins_loud_comp_stereo"
-    "in.lsp_plug.lsp_plugins_matcher_mono"
-    "in.lsp_plug.lsp_plugins_matcher_stereo"
-    "in.lsp_plug.lsp_plugins_mb_clipper_mono"
-    "in.lsp_plug.lsp_plugins_mb_clipper_stereo"
-    "in.lsp_plug.lsp_plugins_mb_compressor_lr"
-    "in.lsp_plug.lsp_plugins_mb_compressor_mono"
-    "in.lsp_plug.lsp_plugins_mb_compressor_ms"
-    "in.lsp_plug.lsp_plugins_mb_compressor_stereo"
-    "in.lsp_plug.lsp_plugins_mb_dyna_processor_lr"
-    "in.lsp_plug.lsp_plugins_mb_dyna_processor_mono"
-    "in.lsp_plug.lsp_plugins_mb_dyna_processor_ms"
-    "in.lsp_plug.lsp_plugins_mb_dyna_processor_stereo"
-    "in.lsp_plug.lsp_plugins_mb_expander_lr"
-    "in.lsp_plug.lsp_plugins_mb_expander_mono"
-    "in.lsp_plug.lsp_plugins_mb_expander_ms"
-    "in.lsp_plug.lsp_plugins_mb_expander_stereo"
-    "in.lsp_plug.lsp_plugins_mb_gate_lr"
-    "in.lsp_plug.lsp_plugins_mb_gate_mono"
-    "in.lsp_plug.lsp_plugins_mb_gate_ms"
-    "in.lsp_plug.lsp_plugins_mb_gate_stereo"
-    "in.lsp_plug.lsp_plugins_mb_limiter_mono"
-    "in.lsp_plug.lsp_plugins_mb_limiter_stereo"
-    "in.lsp_plug.lsp_plugins_mb_ringmod_sc_mono"
-    "in.lsp_plug.lsp_plugins_mb_ringmod_sc_stereo"
-    "in.lsp_plug.lsp_plugins_mixer_x16_mono"
-    "in.lsp_plug.lsp_plugins_mixer_x16_stereo"
-    "in.lsp_plug.lsp_plugins_mixer_x4_mono"
-    "in.lsp_plug.lsp_plugins_mixer_x4_stereo"
-    "in.lsp_plug.lsp_plugins_mixer_x8_mono"
-    "in.lsp_plug.lsp_plugins_mixer_x8_stereo"
-    "in.lsp_plug.lsp_plugins_multisampler_x12"
-    "in.lsp_plug.lsp_plugins_multisampler_x12_do"
-    "in.lsp_plug.lsp_plugins_multisampler_x24"
-    "in.lsp_plug.lsp_plugins_multisampler_x24_do"
-    "in.lsp_plug.lsp_plugins_multisampler_x48"
-    "in.lsp_plug.lsp_plugins_multisampler_x48_do"
-    "in.lsp_plug.lsp_plugins_noise_generator_x1"
-    "in.lsp_plug.lsp_plugins_noise_generator_x2"
-    "in.lsp_plug.lsp_plugins_noise_generator_x4"
-    "in.lsp_plug.lsp_plugins_oscillator_mono"
-    "in.lsp_plug.lsp_plugins_oscilloscope_x1"
-    "in.lsp_plug.lsp_plugins_oscilloscope_x2"
-    "in.lsp_plug.lsp_plugins_oscilloscope_x4"
-    "in.lsp_plug.lsp_plugins_para_equalizer_x16_lr"
-    "in.lsp_plug.lsp_plugins_para_equalizer_x16_mono"
-    "in.lsp_plug.lsp_plugins_para_equalizer_x16_ms"
-    "in.lsp_plug.lsp_plugins_para_equalizer_x16_stereo"
-    "in.lsp_plug.lsp_plugins_para_equalizer_x32_lr"
-    "in.lsp_plug.lsp_plugins_para_equalizer_x32_mono"
-    "in.lsp_plug.lsp_plugins_para_equalizer_x32_ms"
-    "in.lsp_plug.lsp_plugins_para_equalizer_x32_stereo"
-    "in.lsp_plug.lsp_plugins_phase_detector"
-    "in.lsp_plug.lsp_plugins_phaser_mono"
-    "in.lsp_plug.lsp_plugins_phaser_stereo"
-    "in.lsp_plug.lsp_plugins_profiler_mono"
-    "in.lsp_plug.lsp_plugins_profiler_stereo"
-    "in.lsp_plug.lsp_plugins_referencer_mono"
-    "in.lsp_plug.lsp_plugins_referencer_stereo"
-    "in.lsp_plug.lsp_plugins_return_mono"
-    "in.lsp_plug.lsp_plugins_return_stereo"
-    "in.lsp_plug.lsp_plugins_ringmod_sc_mono"
-    "in.lsp_plug.lsp_plugins_ringmod_sc_stereo"
-    "in.lsp_plug.lsp_plugins_room_builder_mono"
-    "in.lsp_plug.lsp_plugins_room_builder_stereo"
-    "in.lsp_plug.lsp_plugins_sampler_mono"
-    "in.lsp_plug.lsp_plugins_sampler_stereo"
-    "in.lsp_plug.lsp_plugins_sc_autogain_mono"
-    "in.lsp_plug.lsp_plugins_sc_autogain_stereo"
-    "in.lsp_plug.lsp_plugins_sc_compressor_lr"
-    "in.lsp_plug.lsp_plugins_sc_compressor_mono"
-    "in.lsp_plug.lsp_plugins_sc_compressor_ms"
-    "in.lsp_plug.lsp_plugins_sc_compressor_stereo"
-    "in.lsp_plug.lsp_plugins_sc_dyna_processor_lr"
-    "in.lsp_plug.lsp_plugins_sc_dyna_processor_mono"
-    "in.lsp_plug.lsp_plugins_sc_dyna_processor_ms"
-    "in.lsp_plug.lsp_plugins_sc_dyna_processor_stereo"
-    "in.lsp_plug.lsp_plugins_sc_expander_lr"
-    "in.lsp_plug.lsp_plugins_sc_expander_mono"
-    "in.lsp_plug.lsp_plugins_sc_expander_ms"
-    "in.lsp_plug.lsp_plugins_sc_expander_stereo"
-    "in.lsp_plug.lsp_plugins_sc_gate_lr"
-    "in.lsp_plug.lsp_plugins_sc_gate_mono"
-    "in.lsp_plug.lsp_plugins_sc_gate_ms"
-    "in.lsp_plug.lsp_plugins_sc_gate_stereo"
-    "in.lsp_plug.lsp_plugins_sc_gott_compressor_lr"
-    "in.lsp_plug.lsp_plugins_sc_gott_compressor_mono"
-    "in.lsp_plug.lsp_plugins_sc_gott_compressor_ms"
-    "in.lsp_plug.lsp_plugins_sc_gott_compressor_stereo"
-    "in.lsp_plug.lsp_plugins_sc_limiter_mono"
-    "in.lsp_plug.lsp_plugins_sc_limiter_stereo"
-    "in.lsp_plug.lsp_plugins_sc_matcher_mono"
-    "in.lsp_plug.lsp_plugins_sc_matcher_stereo"
-    "in.lsp_plug.lsp_plugins_sc_mb_compressor_lr"
-    "in.lsp_plug.lsp_plugins_sc_mb_compressor_mono"
-    "in.lsp_plug.lsp_plugins_sc_mb_compressor_ms"
-    "in.lsp_plug.lsp_plugins_sc_mb_compressor_stereo"
-    "in.lsp_plug.lsp_plugins_sc_mb_dyna_processor_lr"
-    "in.lsp_plug.lsp_plugins_sc_mb_dyna_processor_mono"
-    "in.lsp_plug.lsp_plugins_sc_mb_dyna_processor_ms"
-    "in.lsp_plug.lsp_plugins_sc_mb_dyna_processor_stereo"
-    "in.lsp_plug.lsp_plugins_sc_mb_expander_lr"
-    "in.lsp_plug.lsp_plugins_sc_mb_expander_mono"
-    "in.lsp_plug.lsp_plugins_sc_mb_expander_ms"
-    "in.lsp_plug.lsp_plugins_sc_mb_expander_stereo"
-    "in.lsp_plug.lsp_plugins_sc_mb_gate_lr"
-    "in.lsp_plug.lsp_plugins_sc_mb_gate_mono"
-    "in.lsp_plug.lsp_plugins_sc_mb_gate_ms"
-    "in.lsp_plug.lsp_plugins_sc_mb_gate_stereo"
-    "in.lsp_plug.lsp_plugins_sc_mb_limiter_mono"
-    "in.lsp_plug.lsp_plugins_sc_mb_limiter_stereo"
-    "in.lsp_plug.lsp_plugins_send_mono"
-    "in.lsp_plug.lsp_plugins_send_stereo"
-    "in.lsp_plug.lsp_plugins_slap_delay_mono"
-    "in.lsp_plug.lsp_plugins_slap_delay_stereo"
-    "in.lsp_plug.lsp_plugins_spectrum_analyzer_x1"
-    "in.lsp_plug.lsp_plugins_spectrum_analyzer_x12"
-    "in.lsp_plug.lsp_plugins_spectrum_analyzer_x16"
-    "in.lsp_plug.lsp_plugins_spectrum_analyzer_x2"
-    "in.lsp_plug.lsp_plugins_spectrum_analyzer_x4"
-    "in.lsp_plug.lsp_plugins_spectrum_analyzer_x8"
-    "in.lsp_plug.lsp_plugins_surge_filter_mono"
-    "in.lsp_plug.lsp_plugins_surge_filter_stereo"
-    "in.lsp_plug.lsp_plugins_trigger_midi_mono"
-    "in.lsp_plug.lsp_plugins_trigger_midi_stereo"
-    "in.lsp_plug.lsp_plugins_trigger_mono"
-    "in.lsp_plug.lsp_plugins_trigger_stereo"
-    # Другие плагины (standalone не нужны)
-    "calf"
-    "com.giadamusic.Giada"
-    "geonkick"
-    "helm"
-    # Carla варианты (оставляем только основной carla)
-    "carla-control"
-    "carla-jack-multi"
-    "carla-jack-single"
-    "carla-patchbay"
-    "carla-rack"
-  ];
-
-  # Генерируем entries с noDisplay = true
-  hiddenDesktopEntries = builtins.listToAttrs (map (name: {
-    inherit name;
-    value = {
-      name = name;
-      noDisplay = true;
-    };
-  }) hiddenPlugins);
-in
 {
   imports = [
     ./home/hyprland.nix
     ./home/waybar.nix
   ];
 
-  home.username = "leet";
-  home.homeDirectory = "/home/leet";
+  home.username = "ilona";
+  home.homeDirectory = "/home/ilona";
   home.stateVersion = "25.11";
 
   # ===========================================================================
   # ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ
   # ===========================================================================
   home.sessionVariables = {
-    CHROME_EXECUTABLE = "${pkgs.chromium}/bin/chromium";
-    # Масштаб GTK меню (для REAPER и др.)
     GDK_DPI_SCALE = "1.25";
   };
 
@@ -269,7 +50,7 @@ in
   programs.git = {
     enable = true;
     settings = {
-      user.name = "Mikhail Tsai";
+      user.name = "Ilona Tsai";
       user.email = ""; # Добавь свой email
       init.defaultBranch = "main";
       pull.rebase = false;
@@ -314,12 +95,6 @@ in
       git_branch = {
         symbol = " ";
       };
-      nodejs = {
-        symbol = " ";
-      };
-      rust = {
-        symbol = " ";
-      };
       python = {
         symbol = " ";
       };
@@ -330,9 +105,6 @@ in
   # ДОПОЛНИТЕЛЬНЫЕ ПАКЕТЫ ПОЛЬЗОВАТЕЛЯ
   # ===========================================================================
   home.packages = with pkgs; [
-    # Node.js
-    nodejs
-
     # Шпаргалка по хоткеям (Super+/)
     (writeShellScriptBin "keybinds" ''
       C='\033[36m'    # cyan
@@ -376,29 +148,6 @@ in
       read -n 1 -s -r
     '')
 
-    # VPN скрипт
-    (writeShellScriptBin "vpn" ''
-      case "$1" in
-        up|connect|"")
-          sudo openvpn --config ~/mikhail.tsai.ovpn
-          ;;
-        down|disconnect)
-          sudo pkill -SIGTERM openvpn
-          ;;
-        status)
-          if ip addr show tun0 &>/dev/null; then
-            echo "VPN: Connected"
-            ip addr show tun0 | grep inet
-          else
-            echo "VPN: Disconnected"
-          fi
-          ;;
-        *)
-          echo "Usage: vpn [up|down|status]"
-          ;;
-      esac
-    '')
-
     # Power menu (rofi)
     (writeShellScriptBin "power-menu" ''
       chosen=$(printf "  Lock\n  Logout\n  Suspend\n  Reboot\n  Shutdown" | rofi -dmenu -i -p "Power" -theme-str '
@@ -425,7 +174,6 @@ in
 
     # Медиа
     imv           # просмотр изображений
-    yt-dlp        # для UltraScrap (скачивание песен караоке)
 
     # Уведомления
     libnotify     # для notify-send
@@ -437,24 +185,7 @@ in
   # ===========================================================================
   # DESKTOP ENTRIES
   # ===========================================================================
-  xdg.desktopEntries = hiddenDesktopEntries // {
-    ktalk = {
-      name = "KTalk";
-      exec = "ktalk";
-      terminal = false;
-      categories = [ "Network" "Chat" ];
-      comment = "KTalk messenger";
-    };
-    ultrastardx = {
-      name = "UltraStar Deluxe";
-      genericName = "Karaoke Game";
-      exec = "ultrastardx";
-      icon = "ultrastardx";
-      terminal = false;
-      categories = [ "Game" "Music" ];
-      comment = "Sing along to your favorite songs";
-    };
-  };
+  xdg.desktopEntries = {};
 
   # ===========================================================================
   # ДИРЕКТОРИИ
@@ -491,54 +222,6 @@ in
         "DISPLAY=:0"
       ];
       ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.findutils}/bin/find /etc/nixos/wallpapers -type f \\( -name \"*.jpg\" -o -name \"*.png\" -o -name \"*.jpeg\" -o -name \"*.webp\" \\) | ${pkgs.coreutils}/bin/shuf -n 1 | ${pkgs.findutils}/bin/xargs /run/current-system/sw/bin/awww img --transition-type grow --transition-pos center'";
-    };
-  };
-
-  # Синхронизация календаря каждые 15 минут
-  systemd.user.services.vdirsyncer-sync = {
-    Unit = {
-      Description = "Sync calendars with vdirsyncer";
-    };
-    Service = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.vdirsyncer}/bin/vdirsyncer sync";
-    };
-  };
-
-  systemd.user.timers.vdirsyncer-sync = {
-    Unit = {
-      Description = "Sync calendars every 15 minutes";
-    };
-    Timer = {
-      OnBootSec = "5min";
-      OnUnitActiveSec = "15min";
-    };
-    Install = {
-      WantedBy = [ "timers.target" ];
-    };
-  };
-
-  # Нотификации о событиях календаря (за 10 минут)
-  systemd.user.services.khal-notify = {
-    Unit = {
-      Description = "Calendar event notifications";
-    };
-    Service = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.khal}/bin/khal list now 15m --format \"{title}\" 2>/dev/null | head -1 | xargs -I {} ${pkgs.libnotify}/bin/notify-send \"📅 Скоро\" \"{}\"'";
-    };
-  };
-
-  systemd.user.timers.khal-notify = {
-    Unit = {
-      Description = "Check calendar events every 5 minutes";
-    };
-    Timer = {
-      OnBootSec = "1min";
-      OnUnitActiveSec = "5min";
-    };
-    Install = {
-      WantedBy = [ "timers.target" ];
     };
   };
 
@@ -702,56 +385,15 @@ in
   '';
 
   # ===========================================================================
-  # KHAL (терминальный календарь)
+  # NWG-DOCK (начальный набор закреплённых приложений)
+  # Илона может менять: правый клик на иконке → Pin/Unpin
   # ===========================================================================
-  xdg.configFile."khal/config".text = ''
-    [calendars]
-
-    [[personal]]
-    path = ~/.local/share/vdirsyncer/google/tsaimikhail@gmail.com/
-    color = dark cyan
-
-    [[holidays_uy]]
-    path = ~/.local/share/vdirsyncer/google/cln2qpr25pqni8r8dtm6ip31f506esjfelo2sthecdgmopbechgn4bj7dtnmer355phmur8@virtual/
-    color = dark green
-    readonly = true
-
-    [default]
-    default_calendar = personal
-    highlight_event_days = true
-
-    [locale]
-    timeformat = %H:%M
-    dateformat = %d.%m.%Y
-    longdateformat = %d.%m.%Y
-    datetimeformat = %d.%m.%Y %H:%M
-    longdatetimeformat = %d.%m.%Y %H:%M
-    firstweekday = 0
-  '';
-
-  # ===========================================================================
-  # VDIRSYNCER (синхронизация с Google Calendar)
-  # ===========================================================================
-  xdg.configFile."vdirsyncer/config".text = ''
-    [general]
-    status_path = "~/.local/share/vdirsyncer/status/"
-
-    [pair google]
-    a = "google_local"
-    b = "google_remote"
-    collections = ["tsaimikhail@gmail.com", "cln2qpr25pqni8r8dtm6ip31f506esjfelo2sthecdgmopbechgn4bj7dtnmer355phmur8@virtual"]
-    metadata = ["color"]
-
-    [storage google_local]
-    type = "filesystem"
-    path = "~/.local/share/vdirsyncer/google/"
-    fileext = ".ics"
-
-    [storage google_remote]
-    type = "google_calendar"
-    token_file = "~/.local/share/vdirsyncer/google_token"
-    client_id.fetch = ["command", "cat", "~/.config/vdirsyncer/client_id"]
-    client_secret.fetch = ["command", "cat", "~/.config/vdirsyncer/client_secret"]
+  xdg.configFile."nwg-dock-hyprland/pinned".text = ''
+    firefox
+    nemo
+    telegram-desktop
+    spotify
+    steam
   '';
 
   # ===========================================================================
