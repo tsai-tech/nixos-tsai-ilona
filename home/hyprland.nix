@@ -474,9 +474,8 @@
   xdg.configFile."hypr/hyprlock.conf".text = ''
     background {
       monitor =
-      path = screenshot
-      blur_passes = 3
-      blur_size = 8
+      color = rgba(0, 0, 0, 0.95)
+      path =
     }
 
     input-field {
